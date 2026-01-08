@@ -15,12 +15,12 @@ function Header() {
     <header className="border-muted-foreground flex h-20 flex-col justify-center border-b border-dashed">
       <nav className="container mx-auto flex items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <Link href={"/"}>
+          <Link href={"/"} aria-label="Home">
             <LucideHome />
           </Link>
           <SignedIn>
             {navLinks.map(({ label, href, icon }) => (
-              <Link key={label} href={href}>
+              <Link key={href} href={href} aria-label={label}>
                 {icon}
               </Link>
             ))}

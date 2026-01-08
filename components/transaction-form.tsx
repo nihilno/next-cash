@@ -32,12 +32,13 @@ function TransactionForm() {
       categoryId: "",
       transactionDate: new Date(),
       description: "",
-      amount: 1,
+      amount: undefined,
     },
   });
 
   async function onSubmit(formData: newTransactionType) {
     console.log(formData);
+    form.reset();
   }
 
   return (
@@ -138,7 +139,6 @@ function TransactionForm() {
             )}
           />
         </div>
-
         <div className="mt-12 grid grid-cols-1 gap-2 sm:col-span-2 sm:grid-cols-2">
           <Button type="submit" className="w-full">
             Save Draft
@@ -149,7 +149,7 @@ function TransactionForm() {
             variant={"outline"}
             onClick={() => push("/dashboard/transactions")}
           >
-            Cancle Draft
+            Cancel Draft
           </Button>
         </div>
       </form>
