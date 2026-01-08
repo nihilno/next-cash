@@ -21,6 +21,7 @@ import { Category } from "@/lib/generated/prisma/client";
 import { newTransactionSchema, newTransactionType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "./date-picker";
 
@@ -30,7 +31,9 @@ function TransactionForm({ categories }: { categories: Category[] }) {
     resolver: zodResolver(newTransactionSchema),
     defaultValues: {
       transactionType: "Expense",
+      categoryId: undefined,
       transactionDate: new Date(),
+      amount: undefined,
       description: "",
     },
   });
@@ -44,6 +47,16 @@ function TransactionForm({ categories }: { categories: Category[] }) {
   const filteredCategories = categories.filter(
     (prev) => prev.type === transactionType,
   );
+
+  useEffect(() => {
+    form.setValue("categoryId", undefined, {
+      // shouldValidate: true,
+      // shouldDirty: true,
+      // shouldTouch: true,
+    });
+
+    form.clearErrors("categoryId");
+  }, [transactionType, form]);
 
   return (
     <Form {...form}>
@@ -86,7 +99,7 @@ function TransactionForm({ categories }: { categories: Category[] }) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {filteredCategories.map(({ id, name, type }) => (
+                      {filteredCategories.map(({ id, name }) => (
                         <SelectItem key={id} value={id}>
                           {name}
                         </SelectItem>

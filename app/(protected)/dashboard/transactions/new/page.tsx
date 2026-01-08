@@ -11,7 +11,6 @@ import { PlusCircle } from "lucide-react";
 
 export default async function NewTransactionPage() {
   const categories = await getCategories();
-  console.log(categories);
 
   return (
     <Card className="max-w-3xl">
