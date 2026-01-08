@@ -3,10 +3,11 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
@@ -23,10 +24,12 @@ function Breadcrumbs() {
       <BreadcrumbList>
         {crumbs.map((crumb, index) => (
           <React.Fragment key={crumb.href}>
-            <BreadcrumbItem>
-              <BreadcrumbLink href={crumb.href} className="capitalize">
-                {crumb.label}
-              </BreadcrumbLink>
+            <BreadcrumbItem className="capitalize">
+              {crumbs.length > index + 1 ? (
+                <Link href={crumb.href}>{crumb.label}</Link>
+              ) : (
+                <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+              )}
             </BreadcrumbItem>
             {crumbs.length > index + 1 && <BreadcrumbSeparator />}
           </React.Fragment>
