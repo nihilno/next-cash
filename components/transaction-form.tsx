@@ -17,22 +17,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Category } from "@/lib/generated/prisma/client";
 import { newTransactionSchema, newTransactionType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "./date-picker";
 
-function TransactionForm() {
+function TransactionForm({ categories }: { categories: Category[] }) {
   const { push } = useRouter();
   const form = useForm<newTransactionType>({
     resolver: zodResolver(newTransactionSchema),
     defaultValues: {
       transactionType: "Expense",
-      categoryId: "",
       transactionDate: new Date(),
       description: "",
-      amount: undefined,
     },
   });
 
@@ -40,6 +39,11 @@ function TransactionForm() {
     console.log(formData);
     form.reset();
   }
+
+  const transactionType = form.watch("transactionType");
+  const filteredCategories = categories.filter(
+    (prev) => prev.type === transactionType,
+  );
 
   return (
     <Form {...form}>
@@ -82,7 +86,11 @@ function TransactionForm() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {/* will be added later from db */}
+                      {filteredCategories.map(({ id, name, type }) => (
+                        <SelectItem key={id} value={id}>
+                          {name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -113,7 +121,12 @@ function TransactionForm() {
               <FormItem>
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
-                  <Input placeholder="120.00" className="text-sm" {...field} />
+                  <Input
+                    placeholder="Provide an amount."
+                    className="text-sm"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -143,6 +156,7 @@ function TransactionForm() {
           <Button type="submit" className="w-full">
             Save Draft
           </Button>
+
           <Button
             type="button"
             className="w-full"

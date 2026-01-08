@@ -1,4 +1,8 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
 import { navLinks } from "@/lib/navLinks";
+import { cn } from "@/lib/utils";
 import {
   SignedIn,
   SignedOut,
@@ -8,20 +12,34 @@ import {
 } from "@clerk/nextjs";
 import { LucideHome } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
 
 function Header() {
+  const path = usePathname();
+
   return (
     <header className="border-muted-foreground flex h-20 flex-col justify-center border-b border-dashed">
       <nav className="container mx-auto flex items-center justify-between px-6">
         <div className="flex items-center gap-3">
           <Link href={"/"} aria-label="Home">
-            <LucideHome />
+            <LucideHome
+              className={cn(
+                "cursor-pointer",
+                path === "/" && "text-blue-700",
+                "transition-colors hover:text-blue-700/50",
+              )}
+            />
           </Link>
           <SignedIn>
-            {navLinks.map(({ label, href, icon }) => (
+            {navLinks.map(({ label, href, icon: Icon }) => (
               <Link key={href} href={href} aria-label={label}>
-                {icon}
+                <Icon
+                  className={cn(
+                    "cursor-pointer",
+                    path === href && "text-blue-700",
+                    "transition-colors hover:text-blue-700/50",
+                  )}
+                />
               </Link>
             ))}
           </SignedIn>

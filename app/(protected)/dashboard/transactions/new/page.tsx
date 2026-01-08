@@ -6,9 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getCategories } from "@/lib/data/get-categories";
 import { PlusCircle } from "lucide-react";
 
-export default function NewTransactionPage() {
+export default async function NewTransactionPage() {
+  const categories = await getCategories();
+  console.log(categories);
+
   return (
     <Card className="max-w-3xl">
       <CardHeader className="pt-12">
@@ -20,7 +24,7 @@ export default function NewTransactionPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <TransactionForm />
+        <TransactionForm categories={categories} />
       </CardContent>
     </Card>
   );

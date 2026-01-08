@@ -20,7 +20,8 @@ const newTransactionSchema = z.object({
     .max(300, {
       message: "Description must contain a maximum of 300 characters.",
     })
-    .optional(),
+    .optional()
+    .transform((val) => val?.trim() || undefined),
 });
 
 type newTransactionType = z.infer<typeof newTransactionSchema>;

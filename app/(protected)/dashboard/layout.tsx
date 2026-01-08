@@ -4,7 +4,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <section>
       <Breadcrumbs />
-      <div className="mt-12">{children}</div>
+      <div className="mt-16">{children}</div>
     </section>
   );
 }
