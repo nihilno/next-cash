@@ -17,12 +17,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createTransaction } from "@/lib/actions/transactions";
 import { Category } from "@/lib/generated/prisma/client";
 import { newTransactionSchema, newTransactionType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { DatePicker } from "./date-picker";
 
 function TransactionForm({ categories }: { categories: Category[] }) {
@@ -31,16 +34,26 @@ function TransactionForm({ categories }: { categories: Category[] }) {
     resolver: zodResolver(newTransactionSchema),
     defaultValues: {
       transactionType: "Expense",
-      categoryId: undefined,
+      categoryId: 0,
       transactionDate: new Date(),
       amount: undefined,
       description: "",
     },
   });
 
+  const { replace } = useRouter();
+
   async function onSubmit(formData: newTransactionType) {
-    console.log(formData);
-    form.reset();
+    const { success, message } = await createTransaction(formData);
+    if (!success) {
+      toast.error(message);
+    } else {
+      toast.success(message);
+      form.reset();
+      replace("/dashboard/transactions");
+    }
+
+    // console.log(formData);
   }
 
   const transactionType = form.watch("transactionType");
@@ -48,13 +61,10 @@ function TransactionForm({ categories }: { categories: Category[] }) {
     (prev) => prev.type === transactionType,
   );
 
-  useEffect(() => {
-    form.setValue("categoryId", undefined, {
-      // shouldValidate: true,
-      // shouldDirty: true,
-      // shouldTouch: true,
-    });
+  const disabled = form.formState.isSubmitting;
 
+  useEffect(() => {
+    form.setValue("categoryId", 0);
     form.clearErrors("categoryId");
   }, [transactionType, form]);
 
@@ -94,13 +104,16 @@ function TransactionForm({ categories }: { categories: Category[] }) {
               <FormItem>
                 <FormLabel>Category</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value?.toString()}
+                  >
                     <SelectTrigger className="w-full">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {filteredCategories.map(({ id, name }) => (
-                        <SelectItem key={id} value={id}>
+                        <SelectItem key={id} value={String(id)}>
                           {name}
                         </SelectItem>
                       ))}
@@ -155,7 +168,7 @@ function TransactionForm({ categories }: { categories: Category[] }) {
                 <FormLabel>Description (optional)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Uber ride."
+                    placeholder="Electricity bill."
                     className="text-sm"
                     {...field}
                   />
@@ -166,15 +179,26 @@ function TransactionForm({ categories }: { categories: Category[] }) {
           />
         </div>
         <div className="mt-12 grid grid-cols-1 gap-2 sm:col-span-2 sm:grid-cols-2">
-          <Button type="submit" className="w-full">
-            Save Draft
+          <Button type="submit" className="w-full" disabled={disabled}>
+            <div className="flex items-center gap-1">
+              {disabled && <Loader2Icon className="animate-spin" />}
+              <span>Save Draft</span>
+            </div>
           </Button>
-
+          <Button
+            type="button"
+            className="w-full"
+            onClick={() => form.reset()}
+            disabled={disabled}
+          >
+            Clear Draft
+          </Button>
           <Button
             type="button"
             className="w-full"
             variant={"outline"}
             onClick={() => push("/dashboard/transactions")}
+            disabled={disabled}
           >
             Cancel Draft
           </Button>

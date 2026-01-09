@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Category {
-  id  String  @id @default(ulid())
+  id  Int  @id @default(autoincrement())
   name  String
   type Type
   transactions Transaction[]
@@ -24,11 +24,12 @@ enum Type {
 model Transaction {
   id  String  @id @default(ulid())
   userId  String @map("user_id")  
-  description String
+  description String?
   amount Int
-  categoryId  String @map("category_id")
+  categoryId  Int @map("category_id")
   category  Category  @relation(fields: [categoryId], references: [id]) 
   createdAt DateTime @default(now()) @map("created_at")
+  transactionDate DateTime @map("transaction_date")
 
   @@map("transactions")
 }

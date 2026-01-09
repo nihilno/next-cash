@@ -1,9 +1,13 @@
+import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <ClerkProvider>{children}</ClerkProvider>
+      <ClerkProvider>
+        {children}
+        <Toaster />
+      </ClerkProvider>
     </>
   );
 }
