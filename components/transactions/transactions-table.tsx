@@ -1,3 +1,5 @@
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -10,8 +12,6 @@ import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 import { Edit } from "lucide-react";
 import Link from "next/link";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
 
 function TransactionsTable({
   transactions,
@@ -42,7 +42,11 @@ function TransactionsTable({
             category: { name, type },
           }) => (
             <TableRow key={id}>
-              <TableCell>{format(transactionDate, "do MMM")}</TableCell>
+              <TableCell>
+                {transactionDate
+                  ? format(new Date(transactionDate), "do MMM")
+                  : "—"}
+              </TableCell>
               <TableCell>{description || "—"}</TableCell>
               <TableCell>
                 <Badge variant={type === "Expense" ? "destructive" : "default"}>

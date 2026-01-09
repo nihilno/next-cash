@@ -29,7 +29,12 @@ function TransactionsFilter({
           onValueChange={(newValue) => setSelectedMonth(Number(newValue))}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={format(month, "MMM")} />
+            <SelectValue
+              placeholder={format(
+                new Date(selectedYear, selectedMonth - 1, 1),
+                "MMM",
+              )}
+            />
           </SelectTrigger>
           <SelectContent className="mt-12">
             {Array.from({ length: 12 }).map((_, index) => (
@@ -39,7 +44,6 @@ function TransactionsFilter({
             ))}
           </SelectContent>
         </Select>
-
         <Select
           name="year"
           value={selectedYear.toString()}

@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { editTransaction } from "@/lib/actions/transactions";
 import { getCategories } from "@/lib/data/get-categories";
 import { getTransactionById } from "@/lib/data/get-transaction";
 import { Edit } from "lucide-react";
@@ -19,12 +20,12 @@ export default async function EditTransactionPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
   if (!isValid(id)) notFound();
 
   const categories = await getCategories();
-  const result = await getTransactionById(id);
+  if (!categories) notFound();
 
+  const result = await getTransactionById(id);
   if (!result.success) notFound();
 
   const { transaction } = result;
@@ -33,7 +34,7 @@ export default async function EditTransactionPage({
   const defaultValues = {
     amount: transaction.amount,
     categoryId: transaction.categoryId,
-    description: transaction.description!,
+    description: transaction.description ?? "",
     transactionDate: transaction.transactionDate,
     transactionType: transaction.category.type,
   };
@@ -54,6 +55,8 @@ export default async function EditTransactionPage({
           categories={categories}
           defaultValues={defaultValues}
           mode="edit"
+          transactionId={id}
+          serverAction={editTransaction}
         />
       </CardContent>
       <CardFooter className="text-muted-foreground mx-auto mt-auto px-10 text-center text-xs">

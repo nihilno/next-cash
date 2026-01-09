@@ -16,7 +16,7 @@ const newTransactionSchema = z.object({
     .refine((date) => date <= addDays(new Date(), 1), {
       message: "Transaction date cannot be later than tomorrow.",
     }),
-  amount: z
+  amount: z.coerce
     .number({ message: "Please, provide an amount" })
     .positive("Amount must be greater than 0."),
   description: z

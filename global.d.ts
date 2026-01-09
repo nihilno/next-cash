@@ -1,4 +1,5 @@
-import { Transaction } from "./lib/generated/prisma/client";
+import { type Category, type Transaction } from "./lib/generated/prisma/client";
+import { newTransactionType } from "./lib/schemas";
 
 declare global {
   type DatePickerProps = {
@@ -18,14 +19,10 @@ declare global {
 
   type TransactionFormProps = {
     categories: Category[];
-    defaultValues?: {
-      description: string | undefined;
-      amount: number;
-      categoryId: number;
-      transactionDate: Date;
-      transactionType: "Income" | "Expense";
-    };
+    defaultValues?: Partial<newTransactionType>;
     mode?: "add" | "edit";
+    transactionId?: string;
+    serverAction: TransactionAction;
   };
 }
 

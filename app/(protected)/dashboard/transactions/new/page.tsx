@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { createTransaction } from "@/lib/actions/transactions";
 import { getCategories } from "@/lib/data/get-categories";
 import { PlusCircle } from "lucide-react";
 
@@ -23,7 +24,10 @@ export default async function NewTransactionPage() {
         </CardDescription>
       </CardHeader>
       <CardContent className="py-4">
-        <TransactionForm categories={categories} />
+        <TransactionForm
+          categories={categories}
+          serverAction={createTransaction}
+        />
       </CardContent>
     </Card>
   );
