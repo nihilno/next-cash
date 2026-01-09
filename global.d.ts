@@ -17,11 +17,20 @@ declare global {
     yearRange: number[];
   };
 
+  type TransactionAction = (
+    formData: unknown,
+    id?: string,
+  ) => Promise<{
+    success: boolean;
+    message: string;
+    transactionDate: Date | null;
+  }>;
+
   type TransactionFormProps = {
     categories: Category[];
     defaultValues?: Partial<newTransactionType>;
     mode?: "add" | "edit";
-    transactionId?: string;
+    id?: string;
     serverAction: TransactionAction;
   };
 }

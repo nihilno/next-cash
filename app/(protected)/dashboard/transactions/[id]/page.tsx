@@ -55,7 +55,7 @@ export default async function EditTransactionPage({
           categories={categories}
           defaultValues={defaultValues}
           mode="edit"
-          transactionId={id}
+          id={id}
           serverAction={editTransaction}
         />
       </CardContent>

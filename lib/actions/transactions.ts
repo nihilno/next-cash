@@ -3,13 +3,13 @@
 import { prisma } from "@/lib/prisma";
 import { transactionSchema } from "@/lib/schemas";
 import { auth } from "@clerk/nextjs/server";
-import z from "zod";
 
 export async function createTransaction(formData: unknown) {
   const { userId } = await auth();
   if (!userId) {
     return {
       success: false,
+      transactionDate: null,
       message: "To perform this action you need to be logged in.",
     };
   }
@@ -22,6 +22,7 @@ export async function createTransaction(formData: unknown) {
       message:
         result.error.issues[0].message ??
         "An error occurred while creating a transaction.",
+      transactionDate: null,
     };
   }
   const { amount, description, transactionDate, categoryId } = result.data;
@@ -46,23 +47,26 @@ export async function createTransaction(formData: unknown) {
     console.error(error);
     return {
       success: false,
+      transactionDate: null,
       message: "An error occurred while creating a transaction.",
     };
   }
 }
 
-export async function editTransaction(formData: unknown, id: string) {
+export async function editTransaction(
+  formData: unknown,
+  id: string | undefined,
+) {
   const { userId } = await auth();
   if (!userId) {
     return {
       success: false,
       message: "To perform this action you need to be logged in.",
+      transactionDate: null,
     };
   }
 
-  const result = transactionSchema
-    .and(z.object({ id: z.number() }))
-    .safeParse(formData);
+  const result = transactionSchema.safeParse(formData);
 
   if (!result.success) {
     return {
@@ -70,6 +74,7 @@ export async function editTransaction(formData: unknown, id: string) {
       message:
         result.error.issues[0].message ??
         "An error occurred while editing a transaction.",
+      transactionDate: null,
     };
   }
   const { amount, description, transactionDate, categoryId } = result.data;
@@ -89,6 +94,7 @@ export async function editTransaction(formData: unknown, id: string) {
     console.error(error);
     return {
       success: false,
+      transactionDate: null,
       message: "An error occurred while editing a transaction.",
     };
   }

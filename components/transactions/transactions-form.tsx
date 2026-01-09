@@ -1,6 +1,5 @@
 "use client";
 
-import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,19 +17,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { newTransactionSchema, type newTransactionType } from "@/lib/schemas";
+import { newTransactionSchema, newTransactionType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { DatePicker } from "../date-picker";
 
 function TransactionForm({
   categories,
   defaultValues,
   mode = "add",
-  transactionId,
+  id,
   serverAction,
 }: TransactionFormProps) {
   const { push, replace } = useRouter();
@@ -52,8 +52,15 @@ function TransactionForm({
   async function onSubmit(formData: newTransactionType) {
     const result = await serverAction(
       formData,
-      mode === "edit" ? transactionId : undefined,
+      mode === "edit" ? id : undefined,
     );
+
+    if (!result.transactionDate) {
+      toast.error(
+        "Incorrect transaction date was specified. Please try again.",
+      );
+      return;
+    }
 
     if (!result.success) {
       toast.error(result.message);
