@@ -44,6 +44,7 @@ function TransactionsFilter({
             ))}
           </SelectContent>
         </Select>
+
         <Select
           name="year"
           value={selectedYear.toString()}

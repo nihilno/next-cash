@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { deleteTransaction } from "@/lib/actions/transactions";
 import { newTransactionSchema, newTransactionType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
@@ -55,6 +56,11 @@ function TransactionForm({
       mode === "edit" ? id : undefined,
     );
 
+    if (!result.success) {
+      toast.error(result.message);
+      return;
+    }
+
     if (!result.transactionDate) {
       toast.error(
         "Incorrect transaction date was specified. Please try again.",
@@ -62,15 +68,25 @@ function TransactionForm({
       return;
     }
 
-    if (!result.success) {
-      toast.error(result.message);
-      return;
-    } else {
-      toast.success(result.message);
-      form.reset();
-      replace(
-        `/dashboard/transactions?month=${result.transactionDate.getMonth() + 1}&year=${result.transactionDate.getFullYear()}`,
-      );
+    toast.success(result.message);
+    form.reset();
+    replace(
+      `/dashboard/transactions?month=${result.transactionDate.getMonth() + 1}&year=${result.transactionDate.getFullYear()}`,
+    );
+  }
+
+  async function onDelete(id: string | undefined) {
+    try {
+      const result = await deleteTransaction(id);
+      if (result.success) {
+        replace("/dashboard/transactions");
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while deleting a transaction.");
     }
   }
 
@@ -225,14 +241,25 @@ function TransactionForm({
               <span>{mode === "add" ? "Create Draft" : "Edit Draft"}</span>
             </div>
           </Button>
-          <Button
-            type="button"
-            variant={"outline"}
-            className="w-full"
-            onClick={() => form.reset()}
-          >
-            Clear Draft
-          </Button>
+          {mode === "add" ? (
+            <Button
+              type="button"
+              variant={"outline"}
+              className="w-full"
+              onClick={() => form.reset()}
+            >
+              Clear Draft
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              variant={"outline"}
+              className="w-full"
+              onClick={() => onDelete(id)}
+            >
+              Delete Draft
+            </Button>
+          )}
           <Button
             type="button"
             className="w-full"

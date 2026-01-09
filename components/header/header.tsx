@@ -1,19 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import SignOut from "@/components/header/sign-out";
 import { navLinks } from "@/lib/consts/navLinks";
 import { cn } from "@/lib/utils";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { SignedIn } from "@clerk/nextjs";
 import { LucideHome } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ModeToggle } from "./mode-toggle";
+import { ModeToggle } from "../global/mode-toggle";
 
 function Header() {
   const path = usePathname();
@@ -48,19 +42,7 @@ function Header() {
             </div>
           </SignedIn>
         </div>
-        <div className="space-x-2">
-          <SignedOut>
-            <SignInButton forceRedirectUrl={"/dashboard"}>
-              <Button size="sm">Sign in</Button>
-            </SignInButton>
-            <SignUpButton forceRedirectUrl={"/dashboard"}>
-              <Button size="sm">Sign up</Button>
-            </SignUpButton>
-          </SignedOut>
-          <SignedIn>
-            <UserButton showName />
-          </SignedIn>
-        </div>
+        <SignOut />
       </nav>
     </header>
   );

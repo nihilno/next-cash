@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { transactionSchema } from "@/lib/schemas";
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 export async function createTransaction(formData: unknown) {
   const { userId } = await auth();
@@ -96,6 +97,35 @@ export async function editTransaction(
       success: false,
       transactionDate: null,
       message: "An error occurred while editing a transaction.",
+    };
+  }
+}
+
+export async function deleteTransaction(id: string | undefined) {
+  const { userId } = await auth();
+  if (!userId) {
+    return {
+      success: false,
+      message: "To perform this action you need to be logged in.",
+    };
+  }
+
+  try {
+    await prisma.transaction.delete({
+      where: { userId, id },
+    });
+
+    revalidatePath("/dashboard/transactions");
+
+    return {
+      success: true,
+      message: "Transaction deleted..",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "An error occurred while deleting a transaction.",
     };
   }
 }
