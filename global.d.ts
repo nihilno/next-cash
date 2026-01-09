@@ -25,6 +25,7 @@ declare global {
       transactionDate: Date;
       transactionType: "Income" | "Expense";
     };
+    mode?: "add" | "edit";
   };
 }
 

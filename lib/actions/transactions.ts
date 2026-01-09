@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { transactionSchema } from "@/lib/schemas";
 import { auth } from "@clerk/nextjs/server";
+import z from "zod";
 
 export async function createTransaction(formData: unknown) {
   const { userId } = await auth();
@@ -50,7 +51,7 @@ export async function createTransaction(formData: unknown) {
   }
 }
 
-export async function editTransaction(formData: unknown) {
+export async function editTransaction(formData: unknown, id: string) {
   const { userId } = await auth();
   if (!userId) {
     return {
@@ -59,7 +60,9 @@ export async function editTransaction(formData: unknown) {
     };
   }
 
-  const result = transactionSchema.safeParse(formData);
+  const result = transactionSchema
+    .and(z.object({ id: z.number() }))
+    .safeParse(formData);
 
   if (!result.success) {
     return {
@@ -72,14 +75,9 @@ export async function editTransaction(formData: unknown) {
   const { amount, description, transactionDate, categoryId } = result.data;
 
   try {
-    const transaction = await prisma.transaction.create({
-      data: {
-        userId,
-        amount,
-        description,
-        categoryId,
-        transactionDate,
-      },
+    const transaction = await prisma.transaction.update({
+      where: { userId, id },
+      data: { amount, description, categoryId, transactionDate },
     });
 
     return {

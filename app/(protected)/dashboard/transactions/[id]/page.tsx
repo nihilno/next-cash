@@ -53,6 +53,7 @@ export default async function EditTransactionPage({
         <TransactionForm
           categories={categories}
           defaultValues={defaultValues}
+          mode="edit"
         />
       </CardContent>
       <CardFooter className="text-muted-foreground mx-auto mt-auto px-10 text-center text-xs">

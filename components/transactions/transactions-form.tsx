@@ -27,18 +27,24 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { DatePicker } from "../date-picker";
 
-function TransactionForm({ categories, defaultValues }: TransactionFormProps) {
+function TransactionForm({
+  categories,
+  defaultValues,
+  mode = "add",
+}: TransactionFormProps) {
   const { push } = useRouter();
   const form = useForm<newTransactionType>({
     resolver: zodResolver(newTransactionSchema),
-    defaultValues: {
-      transactionType: "Expense",
-      categoryId: 0,
-      transactionDate: new Date(),
-      amount: undefined,
-      description: "",
-      ...defaultValues,
-    },
+    defaultValues:
+      mode === "edit"
+        ? defaultValues
+        : {
+            transactionType: "Expense",
+            categoryId: 0,
+            transactionDate: new Date(),
+            amount: undefined,
+            description: "",
+          },
   });
 
   const { replace } = useRouter();
@@ -214,7 +220,7 @@ function TransactionForm({ categories, defaultValues }: TransactionFormProps) {
           >
             <div className="flex items-center gap-1">
               {disabled && <Loader2Icon className="animate-spin" />}
-              <span>Edit Draft</span>
+              <span>{mode === "add" ? "Create Draft" : "Edit Draft"}</span>
             </div>
           </Button>
           <Button
