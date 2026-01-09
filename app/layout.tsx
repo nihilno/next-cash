@@ -1,5 +1,6 @@
 import Header from "@/components/global/header";
 import Providers from "@/components/global/providers";
+import { ThemeProvider } from "@/components/global/theme-provider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -21,12 +22,21 @@ export default function RootLayout({
 }>) {
   return (
     <Providers>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={cn(inter.className, "flex min-h-dvh flex-col antialiased")}
         >
-          <Header />
-          <main className="container mx-auto mt-8 flex-1 px-6">{children}</main>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            <main className="container mx-auto mt-16 flex-1 px-6">
+              {children}
+            </main>
+          </ThemeProvider>
         </body>
       </html>
     </Providers>

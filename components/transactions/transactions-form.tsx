@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createTransaction } from "@/lib/actions/transactions";
-import { Category } from "@/lib/generated/prisma/client";
 import { newTransactionSchema, newTransactionType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
@@ -26,9 +25,9 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { DatePicker } from "./date-picker";
+import { DatePicker } from "../date-picker";
 
-function TransactionForm({ categories }: { categories: Category[] }) {
+function TransactionForm({ categories, defaultValues }: TransactionFormProps) {
   const { push } = useRouter();
   const form = useForm<newTransactionType>({
     resolver: zodResolver(newTransactionSchema),
@@ -38,22 +37,33 @@ function TransactionForm({ categories }: { categories: Category[] }) {
       transactionDate: new Date(),
       amount: undefined,
       description: "",
+      ...defaultValues,
     },
   });
 
   const { replace } = useRouter();
 
   async function onSubmit(formData: newTransactionType) {
-    const { success, message } = await createTransaction(formData);
+    const { success, transactionDate, message } =
+      await createTransaction(formData);
+
+    if (!transactionDate) {
+      toast.error(
+        "Incorrect transaction date was specified. Please try again.",
+      );
+      return;
+    }
+
     if (!success) {
       toast.error(message);
+      return;
     } else {
       toast.success(message);
       form.reset();
-      replace("/dashboard/transactions");
+      replace(
+        `/dashboard/transactions?month=${transactionDate.getMonth() + 1}&year=${transactionDate.getFullYear()}`,
+      );
     }
-
-    // console.log(formData);
   }
 
   const transactionType = form.watch("transactionType");
@@ -64,9 +74,17 @@ function TransactionForm({ categories }: { categories: Category[] }) {
   const disabled = form.formState.isSubmitting;
 
   useEffect(() => {
-    form.setValue("categoryId", 0);
-    form.clearErrors("categoryId");
-  }, [transactionType, form]);
+    const current = form.getValues("categoryId");
+
+    const isValidForType = categories.some(
+      (c) => c.id === current && c.type === transactionType,
+    );
+
+    if (!isValidForType) {
+      form.setValue("categoryId", 0);
+      form.clearErrors("categoryId");
+    }
+  }, [transactionType, categories, form]);
 
   return (
     <Form {...form}>
@@ -74,7 +92,7 @@ function TransactionForm({ categories }: { categories: Category[] }) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="grid grid-cols-1 gap-x-2 gap-y-4 sm:grid-cols-2"
       >
-        <div className="space-y-4">
+        <fieldset className="space-y-4" disabled={disabled}>
           <FormField
             control={form.control}
             name="transactionType"
@@ -105,11 +123,11 @@ function TransactionForm({ categories }: { categories: Category[] }) {
                 <FormLabel>Category</FormLabel>
                 <FormControl>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => field.onChange(Number(value))}
                     value={field.value?.toString()}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue />
+                      <SelectValue placeholder="Select a category." />
                     </SelectTrigger>
                     <SelectContent>
                       {filteredCategories.map(({ id, name }) => (
@@ -124,8 +142,8 @@ function TransactionForm({ categories }: { categories: Category[] }) {
               </FormItem>
             )}
           />
-        </div>
-        <div className="space-y-4">
+        </fieldset>
+        <fieldset className="space-y-4" disabled={disabled}>
           <FormField
             control={form.control}
             name="transactionDate"
@@ -148,18 +166,25 @@ function TransactionForm({ categories }: { categories: Category[] }) {
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Provide an amount."
+                    type="number"
+                    step={"0.01"}
+                    placeholder="0.00"
                     className="text-sm"
                     {...field}
                     value={field.value ?? ""}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value ? Number(e.target.value) : undefined,
+                      )
+                    }
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-        </div>
-        <div className="sm:col-span-2">
+        </fieldset>
+        <fieldset className="sm:col-span-2" disabled={disabled}>
           <FormField
             control={form.control}
             name="description"
@@ -168,7 +193,7 @@ function TransactionForm({ categories }: { categories: Category[] }) {
                 <FormLabel>Description (optional)</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Electricity bill."
+                    placeholder="eg. Electricity bill."
                     className="text-sm"
                     {...field}
                   />
@@ -177,19 +202,26 @@ function TransactionForm({ categories }: { categories: Category[] }) {
               </FormItem>
             )}
           />
-        </div>
-        <div className="mt-12 grid grid-cols-1 gap-2 sm:col-span-2 sm:grid-cols-2">
-          <Button type="submit" className="w-full" disabled={disabled}>
+        </fieldset>
+        <fieldset
+          className="mt-12 grid grid-cols-1 gap-2 sm:col-span-2 sm:grid-cols-2"
+          disabled={disabled}
+        >
+          <Button
+            type="submit"
+            className="w-full sm:col-span-2"
+            disabled={disabled}
+          >
             <div className="flex items-center gap-1">
               {disabled && <Loader2Icon className="animate-spin" />}
-              <span>Save Draft</span>
+              <span>Edit Draft</span>
             </div>
           </Button>
           <Button
             type="button"
+            variant={"outline"}
             className="w-full"
             onClick={() => form.reset()}
-            disabled={disabled}
           >
             Clear Draft
           </Button>
@@ -198,11 +230,10 @@ function TransactionForm({ categories }: { categories: Category[] }) {
             className="w-full"
             variant={"outline"}
             onClick={() => push("/dashboard/transactions")}
-            disabled={disabled}
           >
             Cancel Draft
           </Button>
-        </div>
+        </fieldset>
       </form>
     </Form>
   );

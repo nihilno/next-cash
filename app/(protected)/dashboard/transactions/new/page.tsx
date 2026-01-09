@@ -1,4 +1,4 @@
-import TransactionForm from "@/components/transaction-form";
+import TransactionForm from "@/components/transactions/transactions-form";
 import {
   Card,
   CardContent,
@@ -22,7 +22,7 @@ export default async function NewTransactionPage() {
           Fill in the details for your new transaction.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="py-4">
         <TransactionForm categories={categories} />
       </CardContent>
     </Card>

@@ -1,5 +1,6 @@
 import { addDays } from "date-fns";
 import z from "zod";
+import { TODAY } from "./consts/consts";
 
 const newTransactionSchema = z.object({
   transactionType: z.enum(["Income", "Expense"], {
@@ -15,11 +16,12 @@ const newTransactionSchema = z.object({
     .refine((date) => date <= addDays(new Date(), 1), {
       message: "Transaction date cannot be later than tomorrow.",
     }),
-  amount: z.coerce
+  amount: z
     .number({ message: "Please, provide an amount" })
     .positive("Amount must be greater than 0."),
   description: z
     .string()
+    .trim()
     .max(300, {
       message: "Description must contain a maximum of 300 characters.",
     })
@@ -50,4 +52,17 @@ export const transactionSchema = z.object({
     .refine((date) => date <= addDays(new Date(), 1), {
       message: "Transaction date cannot be later than tomorrow.",
     }),
+});
+
+export const dateSchema = z.object({
+  year: z.coerce
+    .number()
+    .min(TODAY.getFullYear() - 10)
+    .max(TODAY.getFullYear() + 1)
+    .catch(TODAY.getFullYear()),
+  month: z.coerce
+    .number()
+    .min(1)
+    .max(12)
+    .catch(TODAY.getMonth() + 1),
 });
