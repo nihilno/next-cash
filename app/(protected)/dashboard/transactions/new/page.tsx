@@ -14,7 +14,7 @@ export default async function NewTransactionPage() {
   const categories = await getCategories();
 
   return (
-    <Card className="max-w-3xl">
+    <Card className="max-w-4xl">
       <CardHeader className="pt-12">
         <CardTitle className="flex items-center gap-2 text-2xl">
           <PlusCircle /> New Transaction

@@ -1,3 +1,4 @@
+import TransactionsGraph from "@/components/transactions/transactions-graph";
 import TransactionsTable from "@/components/transactions/transactions-table";
 import TransactionsTableFallback from "@/components/transactions/transactions-table-fallback";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,7 @@ export default async function DashboardPage() {
   const result = await getRecentTransactions();
 
   if (!result.success) {
-    throw new Error("Cant find recent yet (error)");
+    throw new Error("Failed to load recent transactions");
   }
 
   // result.transactions = [];
@@ -25,7 +26,7 @@ export default async function DashboardPage() {
 
   return (
     <section className="grid grid-cols-1 gap-8">
-      <div className="min-h-100 border">graph</div>
+      <TransactionsGraph />
       <Card>
         <CardHeader className="pt-12">
           <CardTitle className="flex items-center gap-2 text-2xl">
@@ -44,9 +45,15 @@ export default async function DashboardPage() {
           )}
         </CardContent>
         <CardFooter className="mt-auto flex items-center justify-end gap-2 px-10">
-          <Button variant={"outline"} disabled={isEmpty}>
-            <Link href="/dashboard/transactions">View All</Link>
-          </Button>
+          {isEmpty ? (
+            <Button variant={"outline"} disabled>
+              View All
+            </Button>
+          ) : (
+            <Button variant={"outline"} asChild>
+              <Link href="/dashboard/transactions">View All</Link>
+            </Button>
+          )}
           <Button>
             <Link
               href="/dashboard/transactions/new"

@@ -12,20 +12,28 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Loader2Icon } from "lucide-react";
 
 function DeleteBtn({
   onDelete,
   id,
+  isDeleting,
   disabled,
 }: {
   onDelete: (id: string | undefined) => Promise<void>;
   id: string | undefined;
+  isDeleting: boolean;
   disabled: boolean;
 }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button type="button" variant={"outline"} className="w-full">
+        <Button
+          type="button"
+          variant={"outline"}
+          className="w-full"
+          disabled={disabled || isDeleting}
+        >
           Delete Draft
         </Button>
       </AlertDialogTrigger>
@@ -34,7 +42,7 @@ function DeleteBtn({
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete this
-            transaction and remove it&apos;s data from our servers.
+            transaction and remove its data from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -42,10 +50,15 @@ function DeleteBtn({
           <AlertDialogAction
             className="bg-destructive hover:bg-destructive/90"
             onClick={() => onDelete(id)}
-            disabled={disabled}
+            disabled={isDeleting || disabled}
             type="submit"
           >
-            Continue
+            <div className="flex items-center gap-1">
+              {(isDeleting || disabled) && (
+                <Loader2Icon className="animate-spin" />
+              )}
+              <span>Delete</span>
+            </div>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -24,7 +24,7 @@ import { newTransactionSchema, newTransactionType } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -36,6 +36,7 @@ function TransactionForm({
   serverAction,
 }: TransactionFormProps) {
   const { push, replace } = useRouter();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const form = useForm<newTransactionType>({
     resolver: zodResolver(newTransactionSchema),
@@ -83,6 +84,7 @@ function TransactionForm({
     }
 
     try {
+      setIsDeleting(true);
       const result = await deleteTransaction(id);
       if (result.success) {
         replace("/dashboard/transactions");
@@ -93,6 +95,8 @@ function TransactionForm({
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while deleting a transaction.");
+    } finally {
+      setIsDeleting(false);
     }
   }
   const transactionType = form.watch("transactionType");
@@ -256,7 +260,12 @@ function TransactionForm({
               Clear Draft
             </Button>
           ) : (
-            <DeleteBtn onDelete={onDelete} id={id} disabled={disabled} />
+            <DeleteBtn
+              onDelete={onDelete}
+              id={id}
+              isDeleting={isDeleting}
+              disabled={disabled}
+            />
           )}
           <Button
             type="button"
