@@ -17,6 +17,11 @@ declare global {
     yearRange: number[];
   };
 
+  type CashflowFilterProps = {
+    year: number;
+    yearRange: number[];
+  };
+
   type TransactionAction = (
     formData: unknown,
     id?: string,
@@ -37,6 +42,13 @@ declare global {
   type RecentProps = {
     transactions: TransactionWithCategory[];
     isEmpty: boolean;
+  };
+
+  type DeleteBtnProps = {
+    onDelete: (id: string | undefined) => Promise<void>;
+    id: string | undefined;
+    isDeleting: boolean;
+    disabled: boolean;
   };
 }
 

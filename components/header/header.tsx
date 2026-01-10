@@ -1,5 +1,6 @@
 "use client";
 
+import { ModeToggle } from "@/components/global/mode-toggle";
 import SignOut from "@/components/header/sign-out";
 import { navLinks } from "@/lib/consts/navLinks";
 import { cn } from "@/lib/utils";
@@ -7,7 +8,6 @@ import { SignedIn } from "@clerk/nextjs";
 import { LucideHome } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ModeToggle } from "../global/mode-toggle";
 
 function Header() {
   const path = usePathname();

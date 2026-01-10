@@ -271,7 +271,7 @@ function TransactionForm({
             type="button"
             className="w-full"
             variant={"outline"}
-            onClick={() => push("/dashboard/transactions")}
+            onClick={() => push("/dashboard")}
           >
             Cancel Draft
           </Button>

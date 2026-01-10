@@ -1,6 +1,7 @@
+import "server-only";
+
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import "server-only";
 
 export async function getTransactionById(id: string) {
   try {

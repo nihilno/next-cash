@@ -24,7 +24,6 @@ function TransactionsFilter({
     <div className="mx-auto grid w-full max-w-md grid-cols-3 gap-2">
       <fieldset className="col-span-3 flex items-center gap-2">
         <Select
-          name="month"
           value={selectedMonth.toString()}
           onValueChange={(newValue) => setSelectedMonth(Number(newValue))}
         >
@@ -46,7 +45,6 @@ function TransactionsFilter({
         </Select>
 
         <Select
-          name="year"
           value={selectedYear.toString()}
           onValueChange={(newValue) => setSelectedYear(Number(newValue))}
         >

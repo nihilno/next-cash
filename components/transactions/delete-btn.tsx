@@ -14,17 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Loader2Icon } from "lucide-react";
 
-function DeleteBtn({
-  onDelete,
-  id,
-  isDeleting,
-  disabled,
-}: {
-  onDelete: (id: string | undefined) => Promise<void>;
-  id: string | undefined;
-  isDeleting: boolean;
-  disabled: boolean;
-}) {
+function DeleteBtn({ onDelete, id, isDeleting, disabled }: DeleteBtnProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -54,9 +44,7 @@ function DeleteBtn({
             type="submit"
           >
             <div className="flex items-center gap-1">
-              {(isDeleting || disabled) && (
-                <Loader2Icon className="animate-spin" />
-              )}
+              {isDeleting && <Loader2Icon className="animate-spin" />}
               <span>Delete</span>
             </div>
           </AlertDialogAction>

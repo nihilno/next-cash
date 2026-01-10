@@ -1,7 +1,8 @@
+import "server-only";
+
 import { TODAY } from "@/lib/consts/consts";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import "server-only";
 
 export async function getTransactionsYearsRange() {
   try {
