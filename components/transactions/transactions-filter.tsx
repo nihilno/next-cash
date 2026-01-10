@@ -71,7 +71,7 @@ function TransactionsFilter({
         </Link>
       </Button>
       <Button type="button" asChild>
-        <Link href={"/dashboard/transactions"}>Back</Link>
+        <Link href={"/dashboard/transactions"}>Back to Current</Link>
       </Button>
     </div>
   );

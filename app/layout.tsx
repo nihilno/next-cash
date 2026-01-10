@@ -1,3 +1,4 @@
+import Footer from "@/components/global/footer";
 import Providers from "@/components/global/providers";
 import { ThemeProvider } from "@/components/global/theme-provider";
 import Header from "@/components/header/header";
@@ -36,6 +37,7 @@ export default function RootLayout({
             <main className="container mx-auto mt-16 flex-1 px-6">
               {children}
             </main>
+            <Footer />
           </ThemeProvider>
         </body>
       </html>

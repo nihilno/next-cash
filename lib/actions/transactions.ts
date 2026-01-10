@@ -119,7 +119,7 @@ export async function deleteTransaction(id: string | undefined) {
 
     return {
       success: true,
-      message: "Transaction deleted..",
+      message: "Transaction deleted.",
     };
   } catch (error) {
     console.error(error);

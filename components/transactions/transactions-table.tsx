@@ -19,7 +19,7 @@ function TransactionsTable({
   transactions: TransactionWithCategory[];
 }) {
   return (
-    <Table className="mt-6">
+    <Table className="my-6">
       <TableHeader>
         <TableRow>
           <TableHead className="text-muted-foreground">Date</TableHead>

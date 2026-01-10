@@ -33,6 +33,11 @@ declare global {
     id?: string;
     serverAction: TransactionAction;
   };
+
+  type RecentProps = {
+    transactions: TransactionWithCategory[];
+    isEmpty: boolean;
+  };
 }
 
 export {};

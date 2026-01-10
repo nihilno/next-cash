@@ -1,5 +1,7 @@
 "use client";
 
+import { DatePicker } from "@/components/date-picker";
+import DeleteBtn from "@/components/transactions/delete-btn";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -25,7 +27,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { DatePicker } from "../date-picker";
 
 function TransactionForm({
   categories,
@@ -76,6 +77,11 @@ function TransactionForm({
   }
 
   async function onDelete(id: string | undefined) {
+    if (!id) {
+      toast.error("Cannot delete transaction: invalid ID.");
+      return;
+    }
+
     try {
       const result = await deleteTransaction(id);
       if (result.success) {
@@ -89,7 +95,6 @@ function TransactionForm({
       toast.error("An error occurred while deleting a transaction.");
     }
   }
-
   const transactionType = form.watch("transactionType");
   const filteredCategories = categories.filter(
     (prev) => prev.type === transactionType,
@@ -251,14 +256,7 @@ function TransactionForm({
               Clear Draft
             </Button>
           ) : (
-            <Button
-              type="button"
-              variant={"outline"}
-              className="w-full"
-              onClick={() => onDelete(id)}
-            >
-              Delete Draft
-            </Button>
+            <DeleteBtn onDelete={onDelete} id={id} disabled={disabled} />
           )}
           <Button
             type="button"

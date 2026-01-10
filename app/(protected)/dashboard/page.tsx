@@ -1,3 +1,62 @@
-export default function DashboardPage() {
-  return <h1>DashboardPage</h1>;
+import TransactionsTable from "@/components/transactions/transactions-table";
+import TransactionsTableFallback from "@/components/transactions/transactions-table-fallback";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { getRecentTransactions } from "@/lib/data/get-recent-transactions";
+import { Activity, PlusCircle } from "lucide-react";
+import Link from "next/link";
+
+export default async function DashboardPage() {
+  const result = await getRecentTransactions();
+
+  if (!result.success) {
+    throw new Error("Cant find recent yet (error)");
+  }
+
+  // result.transactions = [];
+  const isEmpty = !result.transactions || result.transactions.length === 0;
+
+  return (
+    <section className="grid grid-cols-1 gap-8">
+      <div className="min-h-100 border">graph</div>
+      <Card>
+        <CardHeader className="pt-12">
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <Activity />
+            Recent Transactions
+          </CardTitle>
+          <CardDescription>
+            View your latest income and expenses in chronological order
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="border-muted-foreground/50 border-b border-dashed py-4">
+          {isEmpty ? (
+            <TransactionsTableFallback />
+          ) : (
+            <TransactionsTable transactions={result.transactions} />
+          )}
+        </CardContent>
+        <CardFooter className="mt-auto flex items-center justify-end gap-2 px-10">
+          <Button variant={"outline"} disabled={isEmpty}>
+            <Link href="/dashboard/transactions">View All</Link>
+          </Button>
+          <Button>
+            <Link
+              href="/dashboard/transactions/new"
+              className="flex items-center gap-1"
+            >
+              <PlusCircle /> Create New
+            </Link>
+          </Button>
+        </CardFooter>
+      </Card>
+    </section>
+  );
 }
