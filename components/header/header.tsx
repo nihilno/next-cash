@@ -28,7 +28,7 @@ function Header() {
           </Link>
           <ModeToggle />
           {!session.isLoaded ? (
-            <div className="border-muted-foreground flex items-center gap-3 border-l pl-3">
+            <div className="border-muted-foreground flex items-center gap-3 pl-3">
               <Loader2Icon
                 className="text-muted-foreground h-5 w-5 animate-spin"
                 aria-label="Loading navigation"
