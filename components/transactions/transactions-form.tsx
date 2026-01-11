@@ -1,7 +1,6 @@
 "use client";
 
 import { DatePicker } from "@/components/date-picker";
-import DeleteBtn from "@/components/transactions/delete-btn";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -27,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import DeleteBtn from "./delete-btn";
 
 function TransactionForm({
   categories,
@@ -38,20 +38,14 @@ function TransactionForm({
   const { push, replace } = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const form = useForm({
+  const form = useForm<newTransactionType>({
     resolver: zodResolver(newTransactionSchema),
-    defaultValues:
-      mode === "edit"
-        ? defaultValues
-        : {
-            transactionType: "Expense",
-            categoryId: undefined,
-            transactionDate: new Date(),
-            amount: undefined,
-            description: "",
-          },
-    shouldUnregister: false,
-    mode: "onChange",
+    defaultValues: {
+      transactionType: "Income",
+      transactionDate: new Date(),
+      ...defaultValues,
+      description: "",
+    },
   });
 
   async function onSubmit(formData: newTransactionType) {

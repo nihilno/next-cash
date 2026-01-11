@@ -21,7 +21,16 @@ function SignOut() {
         </SignUpButton>
       </SignedOut>
       <SignedIn>
-        <UserButton showName />
+        <UserButton
+          showName
+          appearance={{
+            elements: {
+              userButtonBox: {
+                color: "var(--color-foreground)",
+              },
+            },
+          }}
+        />
       </SignedIn>
     </div>
   );

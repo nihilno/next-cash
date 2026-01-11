@@ -6,17 +6,15 @@ const newTransactionSchema = z.object({
   transactionType: z.enum(["Income", "Expense"], {
     message: "Please, select a type.",
   }),
-  categoryId: z.coerce
+  categoryId: z
     .number()
     .int()
     .positive({ message: "Please, select a category." })
     .refine((val) => val > 0, { message: "Please, select a category." }),
-  transactionDate: z.coerce
-    .date()
-    .refine((date) => date <= addDays(new Date(), 1), {
-      message: "Transaction date cannot be later than tomorrow.",
-    }),
-  amount: z.coerce
+  transactionDate: z.date().refine((date) => date <= addDays(new Date(), 1), {
+    message: "Transaction date cannot be later than tomorrow.",
+  }),
+  amount: z
     .number({ message: "Please, provide an amount" })
     .positive("Amount must be greater than 0."),
   description: z

@@ -25,9 +25,8 @@ export default async function DashboardPage({
       <Suspense fallback={<h1>xd</h1>}>
         <TransactionsGraph year={cfYear} />
       </Suspense>
-      <Suspense fallback={<h1>xd</h1>}>
-        <Recent transactions={transactions} />
-      </Suspense>
+
+      <Recent transactions={transactions} />
     </section>
   );
 }
