@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Activity, PlusCircle } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
 
 function Recent({ transactions }: { transactions: TransactionWithCategory[] }) {
   const isEmpty = transactions.length === 0;
@@ -31,9 +30,7 @@ function Recent({ transactions }: { transactions: TransactionWithCategory[] }) {
         {isEmpty ? (
           <TransactionsTableFallback />
         ) : (
-          <Suspense fallback={<h1>Sus recent</h1>}>
-            <TransactionsTable transactions={transactions} />
-          </Suspense>
+          <TransactionsTable transactions={transactions} />
         )}
       </CardContent>
       <CardFooter className="mt-auto flex items-center justify-end gap-2 px-10">

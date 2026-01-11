@@ -38,7 +38,7 @@ function TransactionForm({
   const { push, replace } = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const form = useForm<newTransactionType>({
+  const form = useForm({
     resolver: zodResolver(newTransactionSchema),
     defaultValues:
       mode === "edit"
@@ -50,6 +50,8 @@ function TransactionForm({
             amount: undefined,
             description: "",
           },
+    shouldUnregister: false,
+    mode: "onChange",
   });
 
   async function onSubmit(formData: newTransactionType) {
