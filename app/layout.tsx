@@ -12,7 +12,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Next Cash",
+  title: {
+    template: "Next Cash | %s",
+    default: "Next Cash | Home",
+  },
   description: "Finances managing app.",
 };
 

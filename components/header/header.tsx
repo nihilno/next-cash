@@ -4,13 +4,14 @@ import { ModeToggle } from "@/components/global/mode-toggle";
 import SignOut from "@/components/header/sign-out";
 import { navLinks } from "@/lib/consts/navLinks";
 import { cn } from "@/lib/utils";
-import { SignedIn } from "@clerk/nextjs";
-import { LucideHome } from "lucide-react";
+import { SignedIn, useSession } from "@clerk/nextjs";
+import { Loader2Icon, LucideHome } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 function Header() {
   const path = usePathname();
+  const session = useSession();
 
   return (
     <header className="border-muted-foreground/50 flex h-20 flex-col justify-center border-b border-dashed">
@@ -26,23 +27,33 @@ function Header() {
             />
           </Link>
           <ModeToggle />
-          <SignedIn>
+          {!session.isLoaded ? (
             <div className="border-muted-foreground flex items-center gap-3 border-l pl-3">
-              {navLinks.map(({ label, href, icon: Icon }) => (
-                <Link key={href} href={href} aria-label={label}>
-                  <Icon
-                    className={cn(
-                      "cursor-pointer",
-                      path === href && "text-blue-700",
-                      "transition-colors hover:text-blue-600/70",
-                    )}
-                  />
-                </Link>
-              ))}
+              <Loader2Icon className="text-muted-foreground w-25 animate-spin" />
             </div>
-          </SignedIn>
+          ) : (
+            <SignedIn>
+              <div className="border-muted-foreground flex items-center gap-3 border-l pl-3">
+                {navLinks.map(({ label, href, icon: Icon }) => (
+                  <Link key={href} href={href} aria-label={label}>
+                    <Icon
+                      className={cn(
+                        "cursor-pointer",
+                        path === href && "text-blue-700",
+                        "transition-colors hover:text-blue-600/70",
+                      )}
+                    />
+                  </Link>
+                ))}
+              </div>
+            </SignedIn>
+          )}
         </div>
-        <SignOut />
+        {!session.isLoaded ? (
+          <Loader2Icon className="text-muted-foreground w-25 animate-spin" />
+        ) : (
+          <SignOut />
+        )}
       </nav>
     </header>
   );

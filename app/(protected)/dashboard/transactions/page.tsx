@@ -14,7 +14,12 @@ import { getTransactionsYearsRange } from "@/lib/data/get-years-range";
 import { dateSchema } from "@/lib/schemas";
 import { format } from "date-fns";
 import { ArrowLeftRight } from "lucide-react";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Your Transactions",
+};
 
 export default async function TransactionsPage({
   searchParams,

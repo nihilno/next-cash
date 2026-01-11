@@ -14,10 +14,28 @@ import React from "react";
 function Breadcrumbs() {
   const path = usePathname();
   const segments = path.split("/").filter(Boolean);
-  const crumbs = segments.map((segment, index) => {
-    const href = "/" + segments.slice(0, index + 1).join("/");
-    return { label: segment, href };
-  });
+  // const crumbs = segments.map((segment, index) => {
+  //   const href = "/" + segments.slice(0, index + 1).join("/");
+  //   return { label: segment, href };
+  // });
+
+  function formatSegment(segment: string, index: number, segments: string[]) {
+    const isLast = index === segments.length - 1;
+
+    const isTransactionDetail =
+      segments.length === 3 && segments[1] === "transactions" && isLast;
+
+    if (isTransactionDetail) {
+      return "Transaction Draft";
+    }
+
+    return segment;
+  }
+
+  const crumbs = segments.map((segment, index) => ({
+    label: formatSegment(segment, index, segments),
+    href: "/" + segments.slice(0, index + 1).join("/"),
+  }));
 
   return (
     <Breadcrumb>

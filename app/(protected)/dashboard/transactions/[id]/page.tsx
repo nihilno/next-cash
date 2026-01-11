@@ -11,8 +11,13 @@ import { editTransaction } from "@/lib/actions/transactions";
 import { getCategories } from "@/lib/data/get-categories";
 import { getTransactionById } from "@/lib/data/get-transaction";
 import { Edit } from "lucide-react";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isValid } from "ulidx";
+
+export const metadata: Metadata = {
+  title: "Edit Transaction",
+};
 
 export default async function EditTransactionPage({
   params,

@@ -13,15 +13,21 @@ export function ModeToggle() {
     setMounted(true);
   }, []);
 
-  const disabled = !mounted || !resolvedTheme;
+  if (!mounted) {
+    return (
+      <button aria-label="Toggle theme" disabled className="opacity-0">
+        <span className="sr-only">Toggle theme</span>
+      </button>
+    );
+  }
+
   const isDark = resolvedTheme === "dark";
 
-  const toggle = () => {
-    setTheme(isDark ? "light" : "dark");
-  };
-
   return (
-    <button onClick={toggle} aria-label="Toggle theme" disabled={disabled}>
+    <button
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label="Toggle theme"
+    >
       {isDark ? (
         <Sun className="transition-colors hover:text-blue-700/70" />
       ) : (

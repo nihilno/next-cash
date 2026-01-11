@@ -9,6 +9,11 @@ import {
 import { createTransaction } from "@/lib/actions/transactions";
 import { getCategories } from "@/lib/data/get-categories";
 import { PlusCircle } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Add Transaction",
+};
 
 export default async function NewTransactionPage() {
   const categories = await getCategories();

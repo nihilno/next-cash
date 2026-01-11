@@ -2,7 +2,11 @@ import Recent from "@/components/transactions/recent";
 import TransactionsGraph from "@/components/transactions/transactions-graph";
 import { TODAY } from "@/lib/consts/consts";
 import { getRecentTransactions } from "@/lib/data/get-recent-transactions";
-import { Suspense } from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 export default async function DashboardPage({
   searchParams,
@@ -22,10 +26,7 @@ export default async function DashboardPage({
 
   return (
     <section className="grid grid-cols-1 gap-8">
-      <Suspense fallback={<h1>xd</h1>}>
-        <TransactionsGraph year={cfYear} />
-      </Suspense>
-
+      <TransactionsGraph year={cfYear} />
       <Recent transactions={transactions} />
     </section>
   );

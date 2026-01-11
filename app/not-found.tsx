@@ -1,11 +1,7 @@
-import Link from "next/link";
+import Lost from "@/components/global/lost";
 
-export default function NotFound() {
-  return (
-    <div>
-      <h1>404 - Page Not Found</h1>
-      <p>Sorry, the page you are looking for does not exist.</p>
-      <Link href="/">Return to Home</Link>
-    </div>
-  );
+function NotFound() {
+  return <Lost />;
 }
+
+export default NotFound;

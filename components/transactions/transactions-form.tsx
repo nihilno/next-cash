@@ -43,8 +43,8 @@ function TransactionForm({
     defaultValues: {
       transactionType: "Income",
       transactionDate: new Date(),
-      ...defaultValues,
       description: "",
+      ...defaultValues,
     },
   });
 
