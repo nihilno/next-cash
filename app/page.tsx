@@ -1,11 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
 
-export default async function HomePage() {
-  const { sessionStatus } = await auth();
-  console.log(sessionStatus);
-
+export default function HomePage() {
   return (
     <section className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 space-y-2 text-center">
       <h1 className="text-3xl font-bold tracking-wider sm:text-4xl">

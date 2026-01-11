@@ -29,7 +29,10 @@ function Header() {
           <ModeToggle />
           {!session.isLoaded ? (
             <div className="border-muted-foreground flex items-center gap-3 border-l pl-3">
-              <Loader2Icon className="text-muted-foreground w-25 animate-spin" />
+              <Loader2Icon
+                className="text-muted-foreground h-5 w-5 animate-spin"
+                aria-label="Loading navigation"
+              />
             </div>
           ) : (
             <SignedIn>
@@ -50,7 +53,10 @@ function Header() {
           )}
         </div>
         {!session.isLoaded ? (
-          <Loader2Icon className="text-muted-foreground w-25 animate-spin" />
+          <Loader2Icon
+            className="text-muted-foreground w-25 animate-spin"
+            aria-label="Loading authentication"
+          />
         ) : (
           <SignOut />
         )}
