@@ -15,7 +15,6 @@ function CashflowFilter({ year, yearRange }: CashflowFilterProps) {
   return (
     <fieldset className="flex items-center gap-2">
       <Select
-        defaultValue={year.toString()}
         value={year.toString()}
         onValueChange={(value) => {
           push(`/dashboard?cfyear=${value}`);

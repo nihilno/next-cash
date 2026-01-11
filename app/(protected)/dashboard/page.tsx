@@ -6,14 +6,11 @@ import { getRecentTransactions } from "@/lib/data/get-recent-transactions";
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ cfyear: string }>;
+  searchParams: Promise<{ cfyear?: string }>;
 }) {
   const params = await searchParams;
-  let cfYear = Number(params.cfyear) ?? TODAY.getFullYear();
-
-  if (isNaN(cfYear)) {
-    cfYear = TODAY.getFullYear();
-  }
+  const parsed = params.cfyear ? Number(params.cfyear) : NaN;
+  const cfYear = !isNaN(parsed) ? parsed : TODAY.getFullYear();
 
   const result = await getRecentTransactions();
   if (!result.success) {

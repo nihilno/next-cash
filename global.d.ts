@@ -50,6 +50,12 @@ declare global {
     isDeleting: boolean;
     disabled: boolean;
   };
+
+  type AnnualCashflow = {
+    month: number;
+    income: number;
+    expense: number;
+  };
 }
 
 export {};

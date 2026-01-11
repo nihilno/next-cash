@@ -43,7 +43,7 @@ function Recent({ transactions }: { transactions: TransactionWithCategory[] }) {
             <Link href="/dashboard/transactions">View All</Link>
           </Button>
         )}
-        <Button>
+        <Button asChild>
           <Link
             href="/dashboard/transactions/new"
             className="flex items-center gap-1"
