@@ -23,7 +23,7 @@ function TransactionGraphContent({
   annualCashflow: AnnualCashflow[];
 }) {
   return (
-    <div className="items flex flex-col">
+    <div className="flex flex-col">
       <ChartContainer
         config={{
           income: {
@@ -38,7 +38,10 @@ function TransactionGraphContent({
           <BarChart data={annualCashflow}>
             <CartesianGrid vertical={false} />
             <YAxis tickFormatter={(v) => usd.format(v)} width={55} />
-            <XAxis tickFormatter={(value) => months[value]} />
+            <XAxis
+              dataKey="month"
+              tickFormatter={(value) => months[value] || value}
+            />
             <ChartTooltip
               content={<ChartTooltipContent labelFormatter={() => ""} />}
             />

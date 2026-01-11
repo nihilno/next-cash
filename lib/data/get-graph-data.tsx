@@ -62,8 +62,6 @@ export async function getGraphData(year: number) {
       });
     }
 
-    console.log(cashflow);
-
     return {
       success: true,
       graphData: cashflow,
